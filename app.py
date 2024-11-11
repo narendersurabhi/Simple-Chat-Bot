@@ -5,12 +5,13 @@ app = Flask(__name__)
 
 def chatbot_response(user_input):
     # Simple logic for the chatbot response
+    app_title = os.environ.get("APP_TITLE", "ChatBot")     
     responses = {
         "hello": "Hi there! How can I help you?",
         "how are you?": "I'm just a bot, but I'm doing great! How about you?",
         "bye": "Goodbye! Have a nice day!"
     }
-    return responses.get(user_input.lower(), "Sorry, I didn't understand that.")
+    return responses.get(user_input.lower(), "Sorry, I didn't understand that.") + " from " + app_title
 
 @app.route("/")
 def home():
