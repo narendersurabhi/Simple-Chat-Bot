@@ -1,17 +1,20 @@
 from flask import Flask, render_template, request, jsonify
 import os
+from transformers import pipeline
 
 app = Flask(__name__)
 
 def chatbot_response(user_input):
-    # Simple logic for the chatbot response
-    app_title = os.environ.get("APP_TITLE", "ChatBot")     
-    responses = {
-        "hello": "Hi there! How can I help you?",
-        "how are you?": "I'm just a bot, but I'm doing great! How about you?",
-        "bye": "Goodbye! Have a nice day!"
-    }
-    return responses.get(user_input.lower(), "Sorry, I didn't understand that.") + " from " + app_title
+    # Load the pre-trained model and tokenizer
+    nlp = pipeline("text-generation", model="distilbert-base-uncased")
+
+    # Generate a response
+    response = nlp(user_input, max_length=50, num_return_sequences=1)[0]['generated_text']
+
+    # Add app title
+    app_title = os.environ.get("APP_TITLE", "ChatBot")
+    return response + " from " + app_title
+
 
 @app.route("/")
 def home():
