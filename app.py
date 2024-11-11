@@ -14,7 +14,9 @@ def chatbot_response(user_input):
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    app_title = os.environ.get("APP_TITLE", "ChatBot") 
+    return render_template("index.html", title=app_title)
+
 
 @app.route("/get_response", methods=["POST"])
 def get_response():
