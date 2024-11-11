@@ -13,12 +13,9 @@ model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torc
 generator = pipeline("text-generation", model=model, tokenizer=tokenizer, device=0)
 
 def chatbot_response(user_input):
-    # Load the pre-trained model and tokenizer
-    nlp = pipeline("text-generation", model="EleutherAI/gpt-neo-2.7B")
-
     # Generate a response
     response = generator(user_input, max_length=150, num_return_sequences=1)[0]['generated_text']
-    
+
     # Add app title
     app_title = os.environ.get("APP_TITLE", "ChatBot")
     return response + " from " + app_title
