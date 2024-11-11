@@ -6,10 +6,10 @@ app = Flask(__name__)
 
 def chatbot_response(user_input):
     # Load the pre-trained model and tokenizer
-    nlp = pipeline("text-generation", model="distilbert-base-uncased")
+    nlp = pipeline("text-generation", model="gpt2")
 
     # Generate a response
-    response = nlp(user_input, max_length=50, num_return_sequences=1)[0]['generated_text']
+    response = nlp(user_input, max_length=200, num_return_sequences=1)[0]['generated_text']
 
     # Add app title
     app_title = os.environ.get("APP_TITLE", "ChatBot")
