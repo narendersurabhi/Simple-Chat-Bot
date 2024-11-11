@@ -1,16 +1,24 @@
 from flask import Flask, render_template, request, jsonify
 import os
-from transformers import pipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 app = Flask(__name__)
+
+# Load the pre-trained LLaMA 2 13B model and tokenizer 
+model_name = "meta-llama/LLaMA-2-13B-chat" 
+tokenizer = AutoTokenizer.from_pretrained(model_name) 
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.float16)
+
+# Set up the text generation pipeline 
+generator = pipeline("text-generation", model=model, tokenizer=tokenizer, device=0)
 
 def chatbot_response(user_input):
     # Load the pre-trained model and tokenizer
     nlp = pipeline("text-generation", model="EleutherAI/gpt-neo-2.7B")
 
     # Generate a response
-    response = nlp(user_input, max_length=200, num_return_sequences=1)[0]['generated_text']
-
+    response = generator(user_input, max_length=150, num_return_sequences=1)[0]['generated_text']
+    
     # Add app title
     app_title = os.environ.get("APP_TITLE", "ChatBot")
     return response + " from " + app_title
