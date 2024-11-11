@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 def chatbot_response(user_input):
     # Load the pre-trained model and tokenizer
-    nlp = pipeline("text-generation", model="gpt2")
+    nlp = pipeline("text-generation", model="EleutherAI/gpt-neo-2.7B")
 
     # Generate a response
     response = nlp(user_input, max_length=200, num_return_sequences=1)[0]['generated_text']
